@@ -93,6 +93,7 @@ class Parser:
                 "SeriousCase": SeriousCase
             }
         )
+
     def main(self):
         self.country_data.append({"LastUpdate": utils.current_time()})
         self.region_data.append({"LastUpdate": utils.current_time()})
