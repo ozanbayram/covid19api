@@ -12,5 +12,5 @@ def update_data():
 
 update_data()
 sched = BackgroundScheduler(daemon=True)
-sched.add_job(update_data, 'interval', seconds=120)
+sched.add_job(update_data, 'interval', seconds=3600)
 sched.start()
