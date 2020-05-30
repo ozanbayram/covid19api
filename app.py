@@ -11,9 +11,6 @@ def index():
     total_data = utils.read_json("total_data")
     return total_data[0]["LastUpdate"]
 
-    # with open("data/time.json", "r") as js:
-    #     time = json.load(js)
-    #     return time["time"]
 
 @app.route('/total', methods=['GET'])
 def total():

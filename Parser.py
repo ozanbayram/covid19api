@@ -101,16 +101,3 @@ class Parser:
         self.get_total()
         self.get_country()
         self.get_region()
-
-
-# if __name__ == '__main__':
-#     w = Parser()
-#     utils.create_json(w.region_data,"region_data")
-#     utils.create_json(w.total_data, "total_data")
-#     utils.create_json(w.country_data, "country_data")
-#
-
-    # for country in w.country_data:
-    #     print(country)
-    #     if country["Id"] == "5":
-    #         return jsonify(country)
