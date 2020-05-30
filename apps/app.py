@@ -1,7 +1,6 @@
 from flask import Flask, jsonify
-import scheduler
-import utils
-
+from apps import utils
+from apps import scheduler
 
 app = Flask(__name__)
 

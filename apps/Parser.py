@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-import utils
+from apps import utils
 
 
 class Parser:

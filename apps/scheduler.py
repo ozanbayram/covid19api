@@ -1,7 +1,6 @@
 from apscheduler.schedulers.background import BackgroundScheduler
-import datetime
-from Parser import Parser
-import utils
+from apps.Parser import Parser
+from apps import utils
 
 
 def update_data():
@@ -13,5 +12,5 @@ def update_data():
 
 update_data()
 sched = BackgroundScheduler(daemon=True)
-sched.add_job(update_data, 'interval', seconds=3600)
+sched.add_job(update_data, 'interval', seconds=120)
 sched.start()
