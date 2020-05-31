@@ -18,7 +18,7 @@ class Parser:
         keys = [
             "Id", "Country", "TotalCase", "NewCase", "TotalDeath", "NewDeath",
             "TotalRecovered", "ActiveCase", "SeriousCase", "TotalCasePer1M",
-            "TotalDeathPer1M", "TotalTests", "TestPer1M", "Population", "InRegion",
+            "TotalDeathPer1M", "TotalTests", "TestPer1M", "Population", "InContinent",
                 ]
         tr_list = self.soup.find("tbody").find_all("tr", {"style": ""})
         #for index, tr in enumerate(tr_list):
