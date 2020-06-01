@@ -5,9 +5,9 @@ from apps import utils
 
 def update_data():
     parser = Parser()
-    utils.create_json(parser.region_data, "region_data")
+    utils.create_json(parser.continent_data, "continents_data")
     utils.create_json(parser.total_data, "total_data")
-    utils.create_json(parser.country_data, "country_data")
+    utils.create_json(parser.country_data, "countries_data")
 
 
 update_data()

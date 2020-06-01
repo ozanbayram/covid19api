@@ -6,6 +6,7 @@ import os
 file_path = os.path.dirname(os.path.abspath(__file__))
 project_path = os.path.abspath(os.path.join(file_path, os.path.pardir))
 
+
 def current_time():
     now = datetime.datetime.now()
     current_time = datetime.datetime.strftime(now, '%d %B %Y %X')

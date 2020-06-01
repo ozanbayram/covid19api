@@ -10,7 +10,7 @@ class Parser:
 
     def __init__(self):
         self.country_data = []
-        self.region_data = []
+        self.continent_data = []
         self.total_data = []
         self.main()
 
@@ -39,11 +39,11 @@ class Parser:
             country = dict(zip(keys, values))
             self.country_data.append(country)
 
-    def get_region(self):
-        region_tr = self.soup.find_all("tbody")[1].find_all("tr")
-        for index, tr in enumerate(region_tr[:-1]):
+    def get_continent(self):
+        continent_tr = self.soup.find_all("tbody")[1].find_all("tr")
+        for index, tr in enumerate(continent_tr[:-1]):
             Id = index
-            Region = tr.find_all('td')[-1].text.strip(" +").strip()
+            Continent = tr.find_all('td')[-1].text.strip(" +").strip()
             TotalCase = tr.find_all('td')[2].text.strip(" +").strip()
             NewCase = tr.find_all('td')[3].text.strip(" +").strip()
             if not NewCase: NewCase = "0"
@@ -55,8 +55,8 @@ class Parser:
             if not ActiveCase: ActiveCase = "0"
             SeriousCase = tr.find_all('td')[8].text.strip(" +").strip()
             if not ActiveCase: ActiveCase = "0"
-            self.region_data.append({
-                "Region": Region,
+            self.continent_data.append({
+                "Continent": Continent,
                 "TotalCase": TotalCase,
                 "NewCase": NewCase,
                 "TotalDeath": TotalDeath,
@@ -96,8 +96,8 @@ class Parser:
 
     def main(self):
         self.country_data.append({"LastUpdate": utils.current_time()})
-        self.region_data.append({"LastUpdate": utils.current_time()})
+        self.continent_data.append({"LastUpdate": utils.current_time()})
         self.total_data.append({"LastUpdate": utils.current_time()})
         self.get_total()
         self.get_country()
-        self.get_region()
+        self.get_continent()

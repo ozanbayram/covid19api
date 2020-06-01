@@ -18,12 +18,12 @@ def total():
 
 @app.route('/countries/all', methods=['GET'])
 def all_countries():
-    return jsonify(utils.read_json("country_data"))
+    return jsonify(utils.read_json("countries_data"))
 
 
 @app.route('/countries', methods=['GET'])
 def one_country():
-    countries_data = utils.read_json("country_data")
+    countries_data = utils.read_json("countries_data")
     query_parameters = request.args
     id = query_parameters.get('id')
     continent = query_parameters.get('continent')
@@ -39,17 +39,40 @@ def one_country():
         return jsonify(country)
 
 
+@app.route('/continents/all', methods=['GET'])
+def all_continents():
+    continents_data = utils.read_json("continents_data")
+    return jsonify(continents_data)
+
+
 @app.route('/continents', methods=['GET'])
-def all_regions():
-    regions_data = utils.read_json("region_data")
-    return jsonify(regions_data)
+def one_continent():
+    continents_data = utils.read_json("continents_data")
+    query_parameters = request.args
+    name = query_parameters.get('name')
+    id = query_parameters.get('id')
+    if name:
+        continent = [continent for continent in continents_data[1:] if continent["Continent"] == name]
+        return jsonify(continent)
+    if id:
+        continent = [continent for continent in continents_data[1:] if continent["Id"] == int(id)]
+        return jsonify(continent)
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
-@app.route('/continent/<int:continent_id>', methods=['GET'])
-def one_region(region_id):
-    regions_data = utils.read_json("region_data")
-    region = [region for region in regions_data[1:] if region["Id"] == region_id]
-    return jsonify(region)
+
+
+
+
+
+
+
+
+
+
+
 
 
 # @app.route('/all', methods=['GET'])
@@ -58,7 +81,3 @@ def one_region(region_id):
 #     countries_data = utils.read_json("countries_data")
 #     regions_data = utils.read_json("regions_data")
 #     return jsonify(regions_data, total_data, countries_data)
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
