@@ -3,14 +3,18 @@ from bs4 import BeautifulSoup
 from apps import utils
 
 
+headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                         "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36"}
+
+
 class Parser:
 
-    r = requests.get('https://www.worldometers.info/coronavirus/')
+    r = requests.get('https://www.worldometers.info/coronavirus/',headers=headers)
     soup = BeautifulSoup(r.content, "html.parser", from_encoding='utf-8')
 
     def __init__(self):
-        self.country_data = []
-        self.continent_data = []
+        self.countries_data = []
+        self.continents_data = []
         self.total_data = []
         self.main()
 
@@ -21,7 +25,6 @@ class Parser:
             "TotalDeathPer1M", "TotalTests", "TestPer1M", "Population", "InContinent",
                 ]
         tr_list = self.soup.find("tbody").find_all("tr", {"style": ""})
-        #for index, tr in enumerate(tr_list):
         for tr in tr_list:
             values = []
             try:
@@ -29,74 +32,75 @@ class Parser:
                     continue
             except KeyError:
                 pass
-                #values.append(index)
 
-            for value in tr.find_all("td"):
+            for idx, value in enumerate(tr.find_all("td")):
+                if idx == 7:  # fixed wrong pair in dict
+                    continue
                 value = value.text.strip(" +").strip()
                 if value == "":
                     value = "0"
                 values.append(value)
             country = dict(zip(keys, values))
-            self.country_data.append(country)
+            self.countries_data.append(country)
 
     def get_continent(self):
         continent_tr = self.soup.find_all("tbody")[1].find_all("tr")
         for index, tr in enumerate(continent_tr[:-1]):
-            Id = index
-            Continent = tr.find_all('td')[-1].text.strip(" +").strip()
-            TotalCase = tr.find_all('td')[2].text.strip(" +").strip()
-            NewCase = tr.find_all('td')[3].text.strip(" +").strip()
-            if not NewCase: NewCase = "0"
-            TotalDeath = tr.find_all('td')[4].text.strip(" +").strip()
-            NewDeath =tr.find_all('td')[5].text.strip(" +").strip()
-            if not NewDeath: NewDeath = "0"
-            TotalRecovered =tr.find_all('td')[6].text.strip(" +").strip()
-            ActiveCase = tr.find_all('td')[7].text.strip(" +").strip()
-            if not ActiveCase: ActiveCase = "0"
-            SeriousCase = tr.find_all('td')[8].text.strip(" +").strip()
-            if not ActiveCase: ActiveCase = "0"
-            self.continent_data.append({
-                "Continent": Continent,
-                "TotalCase": TotalCase,
-                "NewCase": NewCase,
-                "TotalDeath": TotalDeath,
-                "NewDeath": NewDeath,
-                "TotalRecovered": TotalRecovered,
-                "ActiveCase": ActiveCase,
-                "SeriousCase": SeriousCase,
-                "Id": Id
+            idx = index
+            continent = tr.find_all('td')[-4].text.strip(" +").strip()
+            total_case = tr.find_all('td')[2].text.strip(" +").strip()
+            new_case = tr.find_all('td')[3].text.strip(" +").strip()
+            if not new_case: new_case = "0"
+            total_death = tr.find_all('td')[4].text.strip(" +").strip()
+            new_death =tr.find_all('td')[5].text.strip(" +").strip()
+            if not new_death: new_death = "0"
+            total_recovered =tr.find_all('td')[6].text.strip(" +").strip()
+            active_case = tr.find_all('td')[8].text.strip(" +").strip()
+            if not active_case: active_case = "0"
+            serious_case = tr.find_all('td')[7].text.strip(" +").strip()
+            if not active_case: active_case = "0"
+            self.continents_data.append({
+                "Continent": continent,
+                "TotalCase": total_case,
+                "NewCase": new_case,
+                "TotalDeath": total_death,
+                "NewDeath": new_death,
+                "TotalRecovered": total_recovered,
+                "ActiveCase": active_case,
+                "SeriousCase": serious_case,
+                "Id": idx
             })
 
     def get_total(self):
         tr = self.soup.find_all("tbody")[2].find("tr").find_all("td")
-        Region = "World"
-        TotalCase = tr[1].text.strip(" +").strip()
-        NewCase = tr[2].text.strip(" +").strip()
-        if not NewCase:NewCase = "0"
-        TotalDeath = tr[3].text.strip(" +").strip()
-        NewDeath =tr[4].text.strip(" +").strip()
-        if not NewDeath: NewDeath = "0"
-        TotalRecovered = tr[5].text.strip(" +").strip()
-        ActiveCase = tr[6].text.strip(" +").strip()
-        if not ActiveCase: ActiveCase = "0"
-        SeriousCase = tr[7].text.strip(" +").strip()
-        if not ActiveCase: ActiveCase = "0"
+        region = "World"
+        total_case = tr[1].text.strip(" +").strip()
+        new_case = tr[2].text.strip(" +").strip()
+        if not new_case:new_case = "0"
+        total_death = tr[3].text.strip(" +").strip()
+        new_death =tr[4].text.strip(" +").strip()
+        if not new_death: new_death = "0"
+        total_recovered = tr[5].text.strip(" +").strip()
+        active_case = tr[6].text.strip(" +").strip()
+        if not active_case: active_case = "0"
+        serious_case = tr[9].text.strip(" +").strip()
+        if not active_case: active_case = "0"
         self.total_data.append(
             {
-                "Region": Region,
-                "TotalCase": TotalCase,
-                "NewCase": NewCase,
-                "TotalDeath": TotalDeath,
-                "NewDeath": NewDeath,
-                "TotalRecovered": TotalRecovered,
-                "ActiveCase": ActiveCase,
-                "SeriousCase": SeriousCase
+                "Region": region,
+                "TotalCase": total_case,
+                "NewCase": new_case,
+                "TotalDeath": total_death,
+                "NewDeath": new_death,
+                "TotalRecovered": total_recovered,
+                "ActiveCase": active_case,
+                "SeriousCase": serious_case
             }
         )
 
     def main(self):
-        self.country_data.append({"LastUpdate": utils.current_time()})
-        self.continent_data.append({"LastUpdate": utils.current_time()})
+        self.countries_data.append({"LastUpdate": utils.current_time()})
+        self.continents_data.append({"LastUpdate": utils.current_time()})
         self.total_data.append({"LastUpdate": utils.current_time()})
         self.get_total()
         self.get_country()

@@ -58,6 +58,7 @@ def one_continent():
         continent = [continent for continent in continents_data[1:] if continent["Id"] == int(id)]
         return jsonify(continent)
 
+
 if __name__ == '__main__':
     app.run(debug=True)
 
