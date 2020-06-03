@@ -1,8 +1,25 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response
 from apps import utils
 from apps import scheduler
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
 
 app = Flask(__name__)
+
+
+limiter = Limiter(
+    app,
+    key_func=get_remote_address,
+    application_limits=["10 per hour"]
+)
+
+@app.errorhandler(429)
+def ratelimit_handler(e):
+    return make_response(
+            jsonify(error=f"Rate limit exceeded {e.description}")
+            , 429
+    )
 
 
 @app.route('/', methods=['GET'])
