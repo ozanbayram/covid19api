@@ -1,5 +1,5 @@
 from apscheduler.schedulers.background import BackgroundScheduler
-from apps.Parser import Parser
+from apps.parser import Parser
 from apps import utils
 
 

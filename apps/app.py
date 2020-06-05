@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, make_response
+from flask import Flask, jsonify, request, make_response, render_template, url_for
 from apps import utils
 from apps import scheduler
 from flask_limiter import Limiter
@@ -11,8 +11,9 @@ app = Flask(__name__)
 limiter = Limiter(
     app,
     key_func=get_remote_address,
-    application_limits=["10 per hour"]
+    application_limits=["100 per hour"]
 )
+
 
 @app.errorhandler(429)
 def ratelimit_handler(e):
@@ -22,10 +23,11 @@ def ratelimit_handler(e):
     )
 
 
-@app.route('/', methods=['GET'])
+@app.route('/')
+@app.route('/index')
 def index():
-    total_data = utils.read_json("total_data")
-    return total_data[0]["LastUpdate"]
+    return render_template("index.html")
+
 
 
 @app.route('/total', methods=['GET'])
@@ -79,23 +81,3 @@ def one_continent():
 if __name__ == '__main__':
     app.run(debug=True)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# @app.route('/all', methods=['GET'])
-# def all_data():
-#     total_data = utils.read_json("total_data")
-#     countries_data = utils.read_json("countries_data")
-#     regions_data = utils.read_json("regions_data")
-#     return jsonify(regions_data, total_data, countries_data)
