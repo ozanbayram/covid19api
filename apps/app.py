@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, make_response, render_template, url_for
+from flask import Flask, jsonify, request, make_response, render_template
 from apps import utils
 from apps import scheduler
 from flask_limiter import Limiter
