@@ -74,14 +74,14 @@ class Parser:
     def get_total(self):
         tr = self.soup.find_all("tbody")[2].find("tr").find_all("td")
         region = "World"
-        total_case = tr[1].text.strip(" +").strip()
-        new_case = tr[2].text.strip(" +").strip()
+        total_case = tr[2].text.strip(" +").strip()
+        new_case = tr[3].text.strip(" +").strip()
         if not new_case:new_case = "0"
-        total_death = tr[3].text.strip(" +").strip()
-        new_death =tr[4].text.strip(" +").strip()
+        total_death = tr[4].text.strip(" +").strip()
+        new_death =tr[5].text.strip(" +").strip()
         if not new_death: new_death = "0"
-        total_recovered = tr[5].text.strip(" +").strip()
-        active_case = tr[6].text.strip(" +").strip()
+        total_recovered = tr[6].text.strip(" +").strip()
+        active_case = tr[8].text.strip(" +").strip()
         if not active_case: active_case = "0"
         serious_case = tr[9].text.strip(" +").strip()
         if not active_case: active_case = "0"
